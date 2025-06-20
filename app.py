@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import base64
-from genAI import get_health_advice
+from genAI import get_health_advice 
 
 
 # ---------------- LOGIN SYSTEM ----------------
@@ -30,12 +30,13 @@ if not st.session_state["authenticated"]:
 # If authenticated, proceed to the main app
 
 # Load Models
-diabetes_model = pickle.load(open(r'Models\\diabetes_pred.pkl', 'rb'))
-heart_model = pickle.load(open(r'Models\\heart_pred.pkl', 'rb'))
-parkinson_model = pickle.load(open(r'Models\\parkinson_pred.pkl', 'rb'))
-stroke_model = joblib.load('Models\\stroke_pred.joblib')
+# Using forward slashes for cross-platform compatibility
+diabetes_model = pickle.load(open(r'Models/diabetes_pred.pkl', 'rb'))
+heart_model = pickle.load(open(r'Models/heart_pred.pkl', 'rb'))
+parkinson_model = pickle.load(open(r'Models/parkinson_pred.pkl', 'rb'))
+stroke_model = joblib.load('Models/stroke_pred.joblib')
 
-# Define pages for dropdown
+# Define pages for dropdown (only main prediction pages)
 disease_pages = ["Home", "Diabetes", "Heart Disease", "Parkinson's", "Stroke"]
 
 # Sidebar Navigation
@@ -43,26 +44,76 @@ if "page" not in st.session_state:
     st.session_state["page"] = "Home"
 
 st.sidebar.title("Navigation")
-selected_page = st.sidebar.selectbox(
+
+# Determine the initial index for the selectbox
+# If the current page is one of the disease pages, set the index accordingly.
+# Otherwise, default to "Home" (index 0), but this won't change the actual st.session_state["page"]
+current_selectbox_index = 0
+if st.session_state["page"] in disease_pages:
+    current_selectbox_index = disease_pages.index(st.session_state["page"])
+
+sidebar_selection = st.sidebar.selectbox(
     "Choose Disease",
     disease_pages,
-    index=disease_pages.index(st.session_state["page"]) if st.session_state["page"] in disease_pages else 0,
+    index=current_selectbox_index,
     key="page_selector"
 )
 
-if selected_page != st.session_state["page"]:
-    st.session_state["page"] = selected_page
-    st.rerun()     
+# CRUCIAL FIX: Only update st.session_state["page"] from the selectbox
+# IF the selected value is different from the current page AND the current page
+# is NOT a manual page (which isn't in the selectbox anyway).
+# This prevents the selectbox's default "Home" from overwriting manual pages.
+if sidebar_selection != st.session_state["page"] and st.session_state["page"] in disease_pages:
+    st.session_state["page"] = sidebar_selection
+    st.rerun()
+# If st.session_state["page"] is a manual page (e.g., "User Manual"), and sidebar_selection
+# defaulted to "Home", we do nothing here, preserving the manual page state.
 
-# User Manual Button in sidebar
+
+# User Manual Button in sidebar - This button *explicitly* sets the page to "User Manual"
 st.sidebar.markdown("---")
 st.sidebar.title("Documentation")
 if st.sidebar.button("📖 User Manual", use_container_width=True):
     st.session_state["page"] = "User Manual"
     st.rerun()
 
-# Page Content Logic
-if st.session_state["page"] == "User Manual":
+# Logout button
+st.sidebar.markdown("""<hr style="margin-top:200px; margin-bottom:10px;">""", unsafe_allow_html=True)
+logout_placeholder = st.sidebar.empty()
+with logout_placeholder:
+    if st.button("🚪 Logout", key="logout_btn"):
+        st.session_state["authenticated"] = False
+        st.rerun()
+
+
+# --- Consolidated Page Content Logic ---
+# This is the main structure that decides which page to render.
+if st.session_state["page"] == "Home":
+    st.title("Multi-Disease Prediction App")
+    st.markdown("### Choose a disease to predict:")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🩺 Diabetes Prediction", use_container_width=True):
+            st.session_state["page"] = "Diabetes"
+            st.rerun()
+    with col2:
+        if st.button("❤️ Heart Disease Prediction", use_container_width=True):
+            st.session_state["page"] = "Heart Disease"
+            st.rerun()
+
+    col3, col4 = st.columns(2)
+    with col3:
+        if st.button("🧠 Parkinson's Prediction", use_container_width=True):
+            st.session_state["page"] = "Parkinson's"
+            st.rerun()
+    with col4:
+        if st.button("🩸 Stroke Prediction", use_container_width=True):
+            st.session_state["page"] = "Stroke"
+            st.rerun()
+
+elif st.session_state["page"] == "User Manual":
+    # The 'Back to Home' button for the Manuals section
     if st.button("⬅️ Back to Home"):
         st.session_state["page"] = "Home"
         st.rerun()
@@ -122,7 +173,7 @@ elif st.session_state["page"] == "Diabetes Manual":
         base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
-    
+
 
 elif st.session_state["page"] == "Heart Disease Manual":
     if st.button("⬅️ Back to User Manual"):
@@ -153,7 +204,7 @@ elif st.session_state["page"] == "Heart Disease Manual":
     -You’ll get a medical explanation and when to consult a doctor.
     - The app predicts heart disease risk based on your inputs.
     - Always consult a healthcare professional for a proper diagnosis.
-                
+
     ### Sample Report(Images/Reports):
     """)
     st.image("Sample_Parameters/heart_parameters.png", caption="Sample Heart Report")
@@ -161,7 +212,7 @@ elif st.session_state["page"] == "Heart Disease Manual":
         base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
-   
+
 
 elif st.session_state["page"] == "Parkinson's Manual":
     if st.button("⬅️ Back to User Manual"):
@@ -179,7 +230,7 @@ elif st.session_state["page"] == "Parkinson's Manual":
     - **DFA (Detrended Fluctuation Analysis)**
     - **Spread1 and Spread2**
     - **D2 and PPE**
-                
+
     2. Click **Predict Parkinson’s Disease**.
 
     ### Result Interpretation
@@ -190,7 +241,7 @@ elif st.session_state["page"] == "Parkinson's Manual":
     - The app offers tailored lifestyle suggestions and care tips based on your voice indicators.
     - It predicts Parkinson’s risk based on your inputs.
     - Always consult a healthcare professional for a proper diagnosis.
-        
+
     ### Sample Report(Images/Reports):
     """)
     st.image("Sample_Parameters/parkinson_parameters.png", caption="Sample Parkinson Report")
@@ -199,7 +250,6 @@ elif st.session_state["page"] == "Parkinson's Manual":
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
 
-    
 
 elif st.session_state["page"] == "Stroke Manual":
     if st.button("⬅️ Back to User Manual"):
@@ -234,34 +284,6 @@ elif st.session_state["page"] == "Stroke Manual":
         base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
-    
-
-
-
-# Page Content Logic
-if st.session_state["page"] == "Home":
-    st.title("Multi-Disease Prediction App")
-    st.markdown("### Choose a disease to predict:")
-
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🩺 Diabetes Prediction", use_container_width=True):
-            st.session_state["page"] = "Diabetes"
-            st.rerun()
-    with col2:
-        if st.button("❤️ Heart Disease Prediction", use_container_width=True):
-            st.session_state["page"] = "Heart Disease"
-            st.rerun()
-
-    col3, col4 = st.columns(2)
-    with col3:
-        if st.button("🧠 Parkinson's Prediction", use_container_width=True):
-            st.session_state["page"] = "Parkinson's"
-            st.rerun()
-    with col4:
-        if st.button("🩸 Stroke Prediction", use_container_width=True):
-            st.session_state["page"] = "Stroke"
-            st.rerun()
 
 # Diabetes Page
 elif st.session_state["page"] == "Diabetes":
@@ -269,8 +291,6 @@ elif st.session_state["page"] == "Diabetes":
         st.session_state["page"] = "Home"
         st.rerun()
     st.title("Diabetes Prediction")
-    with open("Models/diabetes_pred.pkl", "rb") as f:
-        diabetes_model = pickle.load(f)
 
     # Collect inputs from user
     gender = st.selectbox("Gender", ["Female", "Male"])
@@ -371,7 +391,7 @@ elif st.session_state["page"] == "Heart Disease":
     )
 
     input_data = [[age, sex, cp, trestbps, chol, fbs, restecg,
-                thalach, exang, oldpeak, slope, ca, thal]]
+                    thalach, exang, oldpeak, slope, ca, thal]]
 
     if st.button("Predict"):
         try:
@@ -496,12 +516,3 @@ elif st.session_state["page"] == "Stroke":
             st.write(advice)
         except Exception as e:
             st.error(f"Prediction failed: {str(e)}")
-
-
-st.sidebar.markdown("""<hr style="margin-top:200px; margin-bottom:10px;">""", unsafe_allow_html=True)
-logout_placeholder = st.sidebar.empty()
-with logout_placeholder:
-    if st.button("🚪 Logout", key="logout_btn"):
-        st.session_state["authenticated"] = False
-        st.rerun()
-
