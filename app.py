@@ -168,8 +168,8 @@ elif st.session_state["page"] == "Diabetes Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample_Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
-    with open("Sample_Parameters/diabetes.pdf", "rb") as pdf_file:
+    st.image("Sample Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
+    with open("Sample Parameters/diabetes.pdf", "rb") as pdf_file:
         base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
@@ -207,8 +207,8 @@ elif st.session_state["page"] == "Heart Disease Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample_Parameters/heart_parameters.png", caption="Sample Heart Report")
-    with open("Sample_Parameters/heart.pdf", "rb") as pdf_file:
+    st.image("Sample Parameters/heart_parameters.png", caption="Sample Heart Report")
+    with open("Sample Parameters/heart.pdf", "rb") as pdf_file:
         base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
@@ -244,8 +244,8 @@ elif st.session_state["page"] == "Parkinson's Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample_Parameters/parkinson_parameters.png", caption="Sample Parkinson Report")
-    with open("Sample_Parameters/parkinsons_symptoms_diary.pdf", "rb") as pdf_file:
+    st.image("Sample Parameters/parkinson_parameters.png", caption="Sample Parkinson Report")
+    with open("Sample Parameters/parkinsons_symptoms_diary.pdf", "rb") as pdf_file:
         base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
@@ -279,8 +279,8 @@ elif st.session_state["page"] == "Stroke Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample_Parameters/stroke_parameters.png", caption="Sample Stroke Report")
-    with open("Sample_Parameters/Stroke-Risk-Assessment.pdf", "rb") as pdf_file:
+    st.image("Sample Parameters/stroke_parameters.png", caption="Sample Stroke Report")
+    with open("Sample Parameters/Stroke-Risk-Assessment.pdf", "rb") as pdf_file:
         base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
         pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
