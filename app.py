@@ -170,8 +170,8 @@ elif st.session_state["page"] == "Diabetes Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
-    pdf_path = "Sample Parameters/diabetes.pdf"
+    st.image("Sample_Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
+    pdf_path = "Sample_Parameters/diabetes.pdf"
     if os.path.exists(pdf_path):
             try:
                 with open(pdf_path, "rb") as pdf_file:
@@ -227,8 +227,8 @@ elif st.session_state["page"] == "Heart Disease Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample Parameters/heart_parameters.png", caption="Sample Heart Report")
-    pdf_path = "Sample Parameters/heart.pdf"
+    st.image("Sample_Parameters/heart_parameters.png", caption="Sample Heart Report")
+    pdf_path = "Sample_Parameters/heart.pdf"
     if os.path.exists(pdf_path):
         try:
             with open(pdf_path, "rb") as pdf_file:
@@ -281,8 +281,8 @@ elif st.session_state["page"] == "Parkinson's Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample Parameters/parkinson_parameters.png", caption="Sample Parkinson Report")
-    pdf_path = "Sample Parameters/parkinsons_symptoms_diary.pdf"
+    st.image("Sample_Parameters/parkinson_parameters.png", caption="Sample Parkinson Report")
+    pdf_path = "Sample_Parameters/parkinsons_symptoms_diary.pdf"
     if os.path.exists(pdf_path):
         try:
             with open(pdf_path, "rb") as pdf_file:
@@ -333,8 +333,8 @@ elif st.session_state["page"] == "Stroke Manual":
 
     ### Sample Report(Images/Reports):
     """)
-    st.image("Sample Parameters/stroke_parameters.png", caption="Sample Stroke Report")
-    pdf_path = "Sample Parameters/Stroke-Risk-Assessment.pdf"
+    st.image("Sample_Parameters/stroke_parameters.png", caption="Sample Stroke Report")
+    pdf_path = "Sample_Parameters/Stroke-Risk-Assessment.pdf"
     if os.path.exists(pdf_path):
         try:
             with open(pdf_path, "rb") as pdf_file:
