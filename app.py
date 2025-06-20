@@ -172,7 +172,7 @@ elif st.session_state["page"] == "Diabetes Manual":
     st.image("Sample Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
     pdf_path = "Sample Parameters/diabetes.pdf"
 
-    if os.path.exists(pdf_path):
+    if pdf_path:
         try:
             st.subheader("Sample Report (Pages below):")
             # Convert PDF pages to PIL Image objects
