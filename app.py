@@ -171,34 +171,22 @@ elif st.session_state["page"] == "Diabetes Manual":
     """)
     st.image("Sample Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
     pdf_path = "Sample Parameters/diabetes.pdf"
-
-    if pdf_path:
-        try:
-            #st.subheader("Sample Report (Pages below):")
-            # Convert PDF pages to PIL Image objects
-            # poppler_path might be needed if poppler-utils is not in system PATH
-            # On Render, if installed via apt-get, it should be in PATH.
-            images = convert_from_path(pdf_path)
-
-            for i, image in enumerate(images):
-                st.image(image, caption=f"Page {i+1} of Report", use_column_width=True)
-
-        except Exception as e:
-            st.error(f"Error displaying PDF as images: {e}")
-            st.info("Consider downloading the PDF instead if it doesn't display.")
-            # Optional: Fallback to download button if image conversion fails
+    if os.path.exists(pdf_path):
             try:
                 with open(pdf_path, "rb") as pdf_file:
                     st.download_button(
                         label="Download Sample Diabetes Report PDF",
                         data=pdf_file.read(),
                         file_name="diabetes_sample_report.pdf",
-                        mime="application/pdf"
+                        mime="application/pdf",
+                        help="Click to download the sample diabetes report in PDF format."
                     )
-            except Exception as download_err:
-                st.warning(f"Also failed to prepare PDF for download: {download_err}")
-    else:
-        st.error(f"Error: PDF file not found at {pdf_path}. Please check the path and deployment.")
+            except Exception as e:
+                st.error(f"Error preparing Diabetes Report for download: {e}")
+                st.warning("Could not provide download button for this report.")
+        else:
+            st.error(f"Diabetes Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
+    
 
    # with open("Sample Parameters/diabetes.pdf", "rb") as pdf_file:
    #     base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
@@ -239,10 +227,27 @@ elif st.session_state["page"] == "Heart Disease Manual":
     ### Sample Report(Images/Reports):
     """)
     st.image("Sample Parameters/heart_parameters.png", caption="Sample Heart Report")
-    with open("Sample Parameters/heart.pdf", "rb") as pdf_file:
-        base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
-        st.markdown(pdf_display, unsafe_allow_html=True)
+    pdf_path = "Sample Parameters/heart.pdf"
+    if os.path.exists(pdf_path):
+        try:
+            with open(pdf_path, "rb") as pdf_file:
+                st.download_button(
+                    label="Download Sample Heart Disease Report PDF",
+                    data=pdf_file.read(),
+                    file_name="heart_disease_sample_report.pdf",
+                    mime="application/pdf",
+                    help="Click to download the sample heart disease report in PDF format."
+                )
+        except Exception as e:
+            st.error(f"Error preparing Heart Disease Report for download: {e}")
+            st.warning("Could not provide download button for this report.")
+    else:
+        st.error(f"Heart Disease Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
+        
+    #with open("Sample Parameters/heart.pdf", "rb") as pdf_file:
+     #   base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
+      #  pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
+       # st.markdown(pdf_display, unsafe_allow_html=True)
 
 
 elif st.session_state["page"] == "Parkinson's Manual":
@@ -276,10 +281,27 @@ elif st.session_state["page"] == "Parkinson's Manual":
     ### Sample Report(Images/Reports):
     """)
     st.image("Sample Parameters/parkinson_parameters.png", caption="Sample Parkinson Report")
-    with open("Sample Parameters/parkinsons_symptoms_diary.pdf", "rb") as pdf_file:
-        base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
-        st.markdown(pdf_display, unsafe_allow_html=True)
+    pdf_path = "Sample Parameters/parkinsons_symptoms_diary.pdf"
+    if os.path.exists(pdf_path):
+        try:
+            with open(pdf_path, "rb") as pdf_file:
+                st.download_button(
+                    label="Download Sample Parkinson's Report PDF",
+                    data=pdf_file.read(),
+                    file_name="parkinsons_sample_report.pdf",
+                    mime="application/pdf",
+                    help="Click to download the sample Parkinson's report in PDF format."
+                )
+        except Exception as e:
+            st.error(f"Error preparing Parkinson's Report for download: {e}")
+            st.warning("Could not provide download button for this report.")
+    else:
+        st.error(f"Parkinson's Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
+
+ #   with open("Sample Parameters/parkinsons_symptoms_diary.pdf", "rb") as pdf_file:
+  #      base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
+  #      pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
+   #     st.markdown(pdf_display, unsafe_allow_html=True)
 
 
 elif st.session_state["page"] == "Stroke Manual":
@@ -311,10 +333,28 @@ elif st.session_state["page"] == "Stroke Manual":
     ### Sample Report(Images/Reports):
     """)
     st.image("Sample Parameters/stroke_parameters.png", caption="Sample Stroke Report")
-    with open("Sample Parameters/Stroke-Risk-Assessment.pdf", "rb") as pdf_file:
-        base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
-        st.markdown(pdf_display, unsafe_allow_html=True)
+    pdf_path = "Sample Parameters/Stroke-Risk-Assessment.pdf"
+    if os.path.exists(pdf_path):
+        try:
+            with open(pdf_path, "rb") as pdf_file:
+                st.download_button(
+                    label="Download Sample Stroke Report PDF",
+                    data=pdf_file.read(),
+                    file_name="stroke_sample_report.pdf",
+                    mime="application/pdf",
+                    help="Click to download the sample Stroke report in PDF format."
+                )
+        except Exception as e:
+            st.error(f"Error preparing Stroke Report for download: {e}")
+            st.warning("Could not provide download button for this report.")
+    else:
+        st.error(f"Stroke Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
+
+
+#    with open("Sample Parameters/Stroke-Risk-Assessment.pdf", "rb") as pdf_file:
+ #       base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
+  #      pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
+   #     st.markdown(pdf_display, unsafe_allow_html=True)
 
 # Diabetes Page
 elif st.session_state["page"] == "Diabetes":
