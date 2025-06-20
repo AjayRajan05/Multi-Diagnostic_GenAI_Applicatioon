@@ -170,7 +170,7 @@ elif st.session_state["page"] == "Diabetes Manual":
     """)
     st.image("Sample Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
     try:
-     with open("Sample_Parameters/diabetes.pdf", "rb") as pdf_file:
+     with open("Sample Parameters/diabetes.pdf", "rb") as pdf_file:
          base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
          pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
          st.markdown(pdf_display, unsafe_allow_html=True)
