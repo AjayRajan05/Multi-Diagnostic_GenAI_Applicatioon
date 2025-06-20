@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import base64
-from genAI import get_health_advice # Assuming this is correctly imported elsewhere
+from genAI import get_health_advice
 
 
 # ---------------- LOGIN SYSTEM ----------------
