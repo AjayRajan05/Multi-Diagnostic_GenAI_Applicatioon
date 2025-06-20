@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import base64
+import os
 from pdf2image import convert_from_path
 from genAI import get_health_advice 
 
