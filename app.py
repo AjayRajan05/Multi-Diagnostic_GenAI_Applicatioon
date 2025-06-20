@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import base64
-import pdf2image
+from pdf2image import convert_from_path
 from genAI import get_health_advice 
 
 
@@ -174,7 +174,7 @@ elif st.session_state["page"] == "Diabetes Manual":
 
     if pdf_path:
         try:
-            st.subheader("Sample Report (Pages below):")
+            #st.subheader("Sample Report (Pages below):")
             # Convert PDF pages to PIL Image objects
             # poppler_path might be needed if poppler-utils is not in system PATH
             # On Render, if installed via apt-get, it should be in PATH.
