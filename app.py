@@ -171,7 +171,7 @@ elif st.session_state["page"] == "Diabetes Manual":
     """)
     st.image("Sample Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
     pdf_path = "Sample Parameters/diabetes.pdf"
-    if os.path.exists(pdf_path):
+   if os.path.exists(pdf_path):
             try:
                 with open(pdf_path, "rb") as pdf_file:
                     st.download_button(
@@ -184,8 +184,13 @@ elif st.session_state["page"] == "Diabetes Manual":
             except Exception as e:
                 st.error(f"Error preparing Diabetes Report for download: {e}")
                 st.warning("Could not provide download button for this report.")
-     else:
+    else:
         st.error(f"Diabetes Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
+
+        
+
+    
+     
     
 
    # with open("Sample Parameters/diabetes.pdf", "rb") as pdf_file:
