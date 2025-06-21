@@ -158,41 +158,17 @@ elif st.session_state["page"] == "Diabetes Manual":
 
     ### Sample Report:
     """)
-    # Display the image for parameters
-    image_path = "Sample_Parameters/diabetes_parameters.png"
-    if os.path.exists(image_path):
-        st.image(image_path, caption="Sample Diabetes Parameters")
-    else:
-        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
-
-    # Provide the download button for the PDF
-    
+    st.image("Sample_Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
     pdf_path = "Sample_Parameters/diabetes.pdf"
-
-    # --- TEMPORARY DEBUGGING LINES ---
-    st.write(f"DEBUG: Checking for PDF at path: `{pdf_path}`")
-    if os.path.exists(pdf_path):
-        st.write(f"DEBUG: `os.path.exists` returned TRUE for `{pdf_path}`")
-        try:
-            with open(pdf_path, "rb") as pdf_file: # This is the line that errors (line 172)
-                st.write("DEBUG: File opened successfully, preparing download button.")
+    with open(pdf_path, "rb") as pdf_file:
                 st.download_button(
                     label="Download Sample Diabetes Report PDF",
                     data=pdf_file.read(),
                     file_name="diabetes_sample_report.pdf",
                     mime="application/pdf",
                     help="Click to download the sample diabetes report in PDF format."
-                )
-            st.write("DEBUG: Download button displayed.")
-        except Exception as e:
-            st.error(f"Error preparing Diabetes Report for download: {e}")
-            st.warning("Could not provide download button for this report.")
-    else:
-        st.error(f"Diabetes Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
-        st.write(f"DEBUG: `os.path.exists` returned FALSE for `{pdf_path}`")
-    # --- END TEMPORARY DEBUGGING LINES ---
-
-
+    )
+   
 elif st.session_state["page"] == "Heart Disease Manual":
     if st.button("⬅️ Back to User Manual"):
         st.session_state["page"] = "User Manual"
