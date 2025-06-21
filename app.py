@@ -172,19 +172,17 @@ elif st.session_state["page"] == "Diabetes Manual":
     """)
     st.image("Sample_Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
     #pdf_path = "Sample_Parameters/diabetes.pdf"
-    try:
-        pdf_path = "Sample_Parameters/diabetes.pdf"
-        with open(pdf_path, "rb") as pdf_file:
-            st.download_button(
-                label="Download Sample Diabetes Report PDF",
-                data=pdf_file.read(), # read() ensures bytes are passed
-                file_name="diabetes_sample_report.pdf",
-                mime="application/pdf"
-            )
-    except FileNotFoundError:
-        st.error(f"Error: Sample PDF not found at {pdf_path}")
-    except Exception as e:
-        st.error(f"An unexpected error occurred while preparing the PDF for download: {e}")
+   # try:
+    #    pdf_path = "Sample_Parameters/diabetes.pdf"
+     #   with open(pdf_path, "rb") as pdf_file:
+      #      st.download_button(
+       #         label="Download Sample Diabetes Report PDF",
+        #        data=pdf_file.read(), # read() ensures bytes are passed
+         #       file_name="diabetes_sample_report.pdf",
+          #      mime="application/pdf"
+           # )
+    #except FileNotFoundError:
+      #  st.error(f"Error: Sample PDF not found at {pdf_path}")
 
    # with open("Sample Parameters/diabetes.pdf", "rb") as pdf_file:
    #     base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
