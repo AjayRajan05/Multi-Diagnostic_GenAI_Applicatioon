@@ -166,8 +166,7 @@ elif st.session_state["page"] == "Diabetes Manual":
                     data=pdf_file.read(),
                     file_name="diabetes_sample_report.pdf",
                     mime="application/pdf",
-                    help="Click to download the sample diabetes report in PDF format."
-    )
+                    help="Click to download the sample diabetes report in PDF format.")
    
 elif st.session_state["page"] == "Heart Disease Manual":
     if st.button("⬅️ Back to User Manual"):
