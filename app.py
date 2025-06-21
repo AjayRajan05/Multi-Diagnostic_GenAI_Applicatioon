@@ -5,9 +5,8 @@ import pandas as pd
 import joblib
 import base64
 import os
-from pdf2image import convert_from_path
-from genAI import get_health_advice 
-
+# from pdf2image import convert_from_path # This is not needed if you're only using download buttons
+from genAI import get_health_advice
 
 # ---------------- LOGIN SYSTEM ----------------
 if "authenticated" not in st.session_state:
@@ -48,8 +47,6 @@ if "page" not in st.session_state:
 st.sidebar.title("Navigation")
 
 # Determine the initial index for the selectbox
-# If the current page is one of the disease pages, set the index accordingly.
-# Otherwise, default to "Home" (index 0), but this won't change the actual st.session_state["page"]
 current_selectbox_index = 0
 if st.session_state["page"] in disease_pages:
     current_selectbox_index = disease_pages.index(st.session_state["page"])
@@ -61,18 +58,11 @@ sidebar_selection = st.sidebar.selectbox(
     key="page_selector"
 )
 
-# CRUCIAL FIX: Only update st.session_state["page"] from the selectbox
-# IF the selected value is different from the current page AND the current page
-# is NOT a manual page (which isn't in the selectbox anyway).
-# This prevents the selectbox's default "Home" from overwriting manual pages.
 if sidebar_selection != st.session_state["page"] and st.session_state["page"] in disease_pages:
     st.session_state["page"] = sidebar_selection
     st.rerun()
-# If st.session_state["page"] is a manual page (e.g., "User Manual"), and sidebar_selection
-# defaulted to "Home", we do nothing here, preserving the manual page state.
 
-
-# User Manual Button in sidebar - This button *explicitly* sets the page to "User Manual"
+# User Manual Button in sidebar
 st.sidebar.markdown("---")
 st.sidebar.title("Documentation")
 if st.sidebar.button("📖 User Manual", use_container_width=True):
@@ -89,7 +79,6 @@ with logout_placeholder:
 
 
 # --- Consolidated Page Content Logic ---
-# This is the main structure that decides which page to render.
 if st.session_state["page"] == "Home":
     st.title("Multi-Disease Prediction App")
     st.markdown("### Choose a disease to predict:")
@@ -115,7 +104,6 @@ if st.session_state["page"] == "Home":
             st.rerun()
 
 elif st.session_state["page"] == "User Manual":
-    # The 'Back to Home' button for the Manuals section
     if st.button("⬅️ Back to Home"):
         st.session_state["page"] = "Home"
         st.rerun()
@@ -150,14 +138,14 @@ elif st.session_state["page"] == "Diabetes Manual":
     st.title("🩺 Diabetes Prediction Manual")
     st.markdown("""
     ### How to Use the Diabetes Prediction Tool
-    1. **Select your gender** – Choose either Male or Female.
-    2. **Enter your age** in years.
-    3. Indicate if you have **hypertension** and **heart disease** (Yes = 1, No = 0).
-    4. Select your **smoking history**: "never" or "other".
-    5. Enter your **BMI** (Body Mass Index).
-    6. Enter your **HbA1c level** (average blood sugar level over the past 3 months).
-    7. Enter your current **blood glucose level**.
-    8. Click **Predict Diabetes**.
+    1.  **Select your gender** – Choose either Male or Female.
+    2.  **Enter your age** in years.
+    3.  Indicate if you have **hypertension** and **heart disease** (Yes = 1, No = 0).
+    4.  Select your **smoking history**: "never" or "other".
+    5.  Enter your **BMI** (Body Mass Index).
+    6.  Enter your **HbA1c level** (average blood sugar level over the past 3 months).
+    7.  Enter your current **blood glucose level**.
+    8.  Click **Predict Diabetes**.
 
     ### Result Interpretation
     - **0 = Not Diabetic** – your values don’t indicate diabetes.
@@ -166,28 +154,34 @@ elif st.session_state["page"] == "Diabetes Manual":
     ### Note
     - You'll receive personalized advice and doctor recommendations.
     - The app only predicts diabetes risk based on your inputs.
-    - It is always adviced to consult a healthcare professional for a proper diagnosis.
+    - It is always advised to consult a healthcare professional for a proper diagnosis.
 
-    ### Sample Report(Images/Reports):
+    ### Sample Report:
     """)
-    st.image("Sample_Parameters/diabetes_parameters.png", caption="Sample Diabetes Report")
-    #pdf_path = "Sample_Parameters/diabetes.pdf"
-   # try:
-    #    pdf_path = "Sample_Parameters/diabetes.pdf"
-     #   with open(pdf_path, "rb") as pdf_file:
-      #      st.download_button(
-       #         label="Download Sample Diabetes Report PDF",
-        #        data=pdf_file.read(), # read() ensures bytes are passed
-         #       file_name="diabetes_sample_report.pdf",
-          #      mime="application/pdf"
-           # )
-    #except FileNotFoundError:
-      #  st.error(f"Error: Sample PDF not found at {pdf_path}")
+    # Display the image for parameters
+    image_path = "Sample_Parameters/diabetes_parameters.png"
+    if os.path.exists(image_path):
+        st.image(image_path, caption="Sample Diabetes Parameters")
+    else:
+        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
 
-   # with open("Sample Parameters/diabetes.pdf", "rb") as pdf_file:
-   #     base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-    #    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
-    #    st.markdown(pdf_display, unsafe_allow_html=True)
+    # Provide the download button for the PDF
+    pdf_path = "Sample_Parameters/diabetes.pdf"
+    if os.path.exists(pdf_path):
+        try:
+            with open(pdf_path, "rb") as pdf_file:
+                st.download_button(
+                    label="Download Sample Diabetes Report PDF",
+                    data=pdf_file.read(),
+                    file_name="diabetes_sample_report.pdf",
+                    mime="application/pdf",
+                    help="Click to download the sample diabetes report in PDF format."
+                )
+        except Exception as e:
+            st.error(f"Error preparing Diabetes Report for download: {e}")
+            st.warning("Could not provide download button for this report.")
+    else:
+        st.error(f"Diabetes Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
 
 
 elif st.session_state["page"] == "Heart Disease Manual":
@@ -197,15 +191,15 @@ elif st.session_state["page"] == "Heart Disease Manual":
     st.title("❤️ Heart Disease Prediction Manual")
     st.markdown("""
     ### How to Use the Heart Disease Prediction Tool
-    1. Enter your **age**.
-    2. Select your **sex**: 1 for Male, 0 for Female.
-    3. Choose your **chest pain type** (0–3).
-    4. Input your **resting blood pressure**.
-    5. Input your **cholesterol level**.
-    6. Indicate if your **fasting blood sugar > 120 mg/dl** (0 or 1).
-    7. Select your **ECG results** (0–2).
-    8. Enter your **maximum heart rate**.
-    9. Indicate if you have **exercise-induced angina** (0 or 1).
+    1.  Enter your **age**.
+    2.  Select your **sex**: 1 for Male, 0 for Female.
+    3.  Choose your **chest pain type** (0–3).
+    4.  Input your **resting blood pressure**.
+    5.  Input your **cholesterol level**.
+    6.  Indicate if your **fasting blood sugar > 120 mg/dl** (0 or 1).
+    7.  Select your **ECG results** (0–2).
+    8.  Enter your **maximum heart rate**.
+    9.  Indicate if you have **exercise-induced angina** (0 or 1).
     10. Enter the **ST depression value** (oldpeak).
     11. Choose the **slope of ST segment** (0–2).
     12. Indicate number of **major vessels** (0–3).
@@ -216,13 +210,20 @@ elif st.session_state["page"] == "Heart Disease Manual":
     - **1 = Heart Disease Present**
 
     ### Note
-    -You’ll get a medical explanation and when to consult a doctor.
+    - You’ll get a medical explanation and when to consult a doctor.
     - The app predicts heart disease risk based on your inputs.
     - Always consult a healthcare professional for a proper diagnosis.
 
-    ### Sample Report(Images/Reports):
+    ### Sample Report:
     """)
-    st.image("Sample_Parameters/heart_parameters.png", caption="Sample Heart Report")
+    # Display the image for parameters
+    image_path = "Sample_Parameters/heart_parameters.png"
+    if os.path.exists(image_path):
+        st.image(image_path, caption="Sample Heart Disease Parameters")
+    else:
+        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
+
+    # Provide the download button for the PDF
     pdf_path = "Sample_Parameters/heart.pdf"
     if os.path.exists(pdf_path):
         try:
@@ -239,11 +240,6 @@ elif st.session_state["page"] == "Heart Disease Manual":
             st.warning("Could not provide download button for this report.")
     else:
         st.error(f"Heart Disease Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
-        
-    #with open("Sample Parameters/heart.pdf", "rb") as pdf_file:
-     #   base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-      #  pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
-       # st.markdown(pdf_display, unsafe_allow_html=True)
 
 
 elif st.session_state["page"] == "Parkinson's Manual":
@@ -253,17 +249,17 @@ elif st.session_state["page"] == "Parkinson's Manual":
     st.title("🧠 Parkinson's Prediction Manual")
     st.markdown("""
     ### How to Use the Parkinson’s Disease Prediction Tool
-    1. Input the following voice signal parameters:
-    - **MDVP:Shimmer**
-    - **MDVP:Shimmer(dB)**
-    - **Shimmer:DDA**
-    - **NHR (Noise-to-Harmonics Ratio)**
-    - **RPDE (Recurrence Period Density Entropy)**
-    - **DFA (Detrended Fluctuation Analysis)**
-    - **Spread1 and Spread2**
-    - **D2 and PPE**
+    1.  Input the following voice signal parameters:
+    -   **MDVP:Shimmer**
+    -   **MDVP:Shimmer(dB)**
+    -   **Shimmer:DDA**
+    -   **NHR (Noise-to-Harmonics Ratio)**
+    -   **RPDE (Recurrence Period Density Entropy)**
+    -   **DFA (Detrended Fluctuation Analysis)**
+    -   **Spread1 and Spread2**
+    -   **D2 and PPE**
 
-    2. Click **Predict Parkinson’s Disease**.
+    2.  Click **Predict Parkinson’s Disease**.
 
     ### Result Interpretation
     - **0 = Unlikely to have Parkinson’s**
@@ -274,9 +270,16 @@ elif st.session_state["page"] == "Parkinson's Manual":
     - It predicts Parkinson’s risk based on your inputs.
     - Always consult a healthcare professional for a proper diagnosis.
 
-    ### Sample Report(Images/Reports):
+    ### Sample Report:
     """)
-    st.image("Sample_Parameters/parkinson_parameters.png", caption="Sample Parkinson Report")
+    # Display the image for parameters
+    image_path = "Sample_Parameters/parkinson_parameters.png"
+    if os.path.exists(image_path):
+        st.image(image_path, caption="Sample Parkinson's Parameters")
+    else:
+        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
+
+    # Provide the download button for the PDF
     pdf_path = "Sample_Parameters/parkinsons_symptoms_diary.pdf"
     if os.path.exists(pdf_path):
         try:
@@ -294,11 +297,6 @@ elif st.session_state["page"] == "Parkinson's Manual":
     else:
         st.error(f"Parkinson's Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
 
- #   with open("Sample Parameters/parkinsons_symptoms_diary.pdf", "rb") as pdf_file:
-  #      base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-  #      pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
-   #     st.markdown(pdf_display, unsafe_allow_html=True)
-
 
 elif st.session_state["page"] == "Stroke Manual":
     if st.button("⬅️ Back to User Manual"):
@@ -307,15 +305,15 @@ elif st.session_state["page"] == "Stroke Manual":
     st.title("🩸 Stroke Prediction Manual")
     st.markdown("""
     ### How to Use the Stroke Risk Prediction Tool
-    1. Select your **gender**.
-    2. Enter your **age**.
-    3. Indicate if you have **hypertension** and/or **heart disease** (0 or 1).
-    4. Select whether you have **ever been married**.
-    5. Choose your **work type**.
-    6. Choose your **residence type** (Urban/Rural).
-    7. Input your **average glucose level**.
-    8. Enter your **BMI** (Body Mass Index).
-    9. Select your **smoking status**.
+    1.  Select your **gender**.
+    2.  Enter your **age**.
+    3.  Indicate if you have **hypertension** and/or **heart disease** (0 or 1).
+    4.  Select whether you have **ever been married**.
+    5.  Choose your **work type**.
+    6.  Choose your **residence type** (Urban/Rural).
+    7.  Input your **average glucose level**.
+    8.  Enter your **BMI** (Body Mass Index).
+    9.  Select your **smoking status**.
 
     ### Result Interpretation
     - **0 = Low Stroke Risk**
@@ -326,9 +324,16 @@ elif st.session_state["page"] == "Stroke Manual":
     - It predicts stroke risk based on your inputs.
     - Always consult a healthcare professional for a proper diagnosis.
 
-    ### Sample Report(Images/Reports):
+    ### Sample Report:
     """)
-    st.image("Sample_Parameters/stroke_parameters.png", caption="Sample Stroke Report")
+    # Display the image for parameters
+    image_path = "Sample_Parameters/stroke_parameters.png"
+    if os.path.exists(image_path):
+        st.image(image_path, caption="Sample Stroke Parameters")
+    else:
+        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
+
+    # Provide the download button for the PDF
     pdf_path = "Sample_Parameters/Stroke-Risk-Assessment.pdf"
     if os.path.exists(pdf_path):
         try:
@@ -346,11 +351,6 @@ elif st.session_state["page"] == "Stroke Manual":
     else:
         st.error(f"Stroke Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
 
-
-#    with open("Sample Parameters/Stroke-Risk-Assessment.pdf", "rb") as pdf_file:
- #       base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-  #      pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
-   #     st.markdown(pdf_display, unsafe_allow_html=True)
 
 # Diabetes Page
 elif st.session_state["page"] == "Diabetes":
