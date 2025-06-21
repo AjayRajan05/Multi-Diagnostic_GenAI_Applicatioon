@@ -200,31 +200,15 @@ elif st.session_state["page"] == "Heart Disease Manual":
 
     ### Sample Report:
     """)
-    # Display the image for parameters
-    image_path = "Sample_Parameters/heart_parameters.png"
-    if os.path.exists(image_path):
-        st.image(image_path, caption="Sample Heart Disease Parameters")
-    else:
-        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
-
-    # Provide the download button for the PDF
+    st.image("Sample_Parameters/heart_parameters.png", caption="Sample Diabetes Report")
     pdf_path = "Sample_Parameters/heart.pdf"
-    if os.path.exists(pdf_path):
-        try:
-            with open(pdf_path, "rb") as pdf_file:
+    with open(pdf_path, "rb") as pdf_file:
                 st.download_button(
-                    label="Download Sample Heart Disease Report PDF",
+                    label="Download Sample Diabetes Report PDF",
                     data=pdf_file.read(),
-                    file_name="heart_disease_sample_report.pdf",
+                    file_name="diabetes_sample_report.pdf",
                     mime="application/pdf",
-                    help="Click to download the sample heart disease report in PDF format."
-                )
-        except Exception as e:
-            st.error(f"Error preparing Heart Disease Report for download: {e}")
-            st.warning("Could not provide download button for this report.")
-    else:
-        st.error(f"Heart Disease Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
-
+                    help="Click to download the sample diabetes report in PDF format.")
 
 elif st.session_state["page"] == "Parkinson's Manual":
     if st.button("⬅️ Back to User Manual"):
@@ -256,32 +240,16 @@ elif st.session_state["page"] == "Parkinson's Manual":
 
     ### Sample Report:
     """)
-    # Display the image for parameters
-    image_path = "Sample_Parameters/parkinson_parameters.png"
-    if os.path.exists(image_path):
-        st.image(image_path, caption="Sample Parkinson's Parameters")
-    else:
-        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
-
-    # Provide the download button for the PDF
+    st.image("Sample_Parameters/parkinson_parameters.png", caption="Sample Diabetes Report")
     pdf_path = "Sample_Parameters/parkinsons_symptoms_diary.pdf"
-    if os.path.exists(pdf_path):
-        try:
-            with open(pdf_path, "rb") as pdf_file:
+    with open(pdf_path, "rb") as pdf_file:
                 st.download_button(
-                    label="Download Sample Parkinson's Report PDF",
+                    label="Download Sample Diabetes Report PDF",
                     data=pdf_file.read(),
-                    file_name="parkinsons_sample_report.pdf",
+                    file_name="diabetes_sample_report.pdf",
                     mime="application/pdf",
-                    help="Click to download the sample Parkinson's report in PDF format."
-                )
-        except Exception as e:
-            st.error(f"Error preparing Parkinson's Report for download: {e}")
-            st.warning("Could not provide download button for this report.")
-    else:
-        st.error(f"Parkinson's Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
-
-
+                    help="Click to download the sample diabetes report in PDF format.")
+        
 elif st.session_state["page"] == "Stroke Manual":
     if st.button("⬅️ Back to User Manual"):
         st.session_state["page"] = "User Manual"
@@ -310,31 +278,16 @@ elif st.session_state["page"] == "Stroke Manual":
 
     ### Sample Report:
     """)
-    # Display the image for parameters
-    image_path = "Sample_Parameters/stroke_parameters.png"
-    if os.path.exists(image_path):
-        st.image(image_path, caption="Sample Stroke Parameters")
-    else:
-        st.warning(f"Image not found at: `{image_path}`. Please check file path and deployment.")
-
-    # Provide the download button for the PDF
+    st.image("Sample_Parameters/stroke_parameters.png", caption="Sample Diabetes Report")
     pdf_path = "Sample_Parameters/Stroke-Risk-Assessment.pdf"
-    if os.path.exists(pdf_path):
-        try:
-            with open(pdf_path, "rb") as pdf_file:
+    with open(pdf_path, "rb") as pdf_file:
                 st.download_button(
-                    label="Download Sample Stroke Report PDF",
+                    label="Download Sample Diabetes Report PDF",
                     data=pdf_file.read(),
-                    file_name="stroke_sample_report.pdf",
+                    file_name="diabetes_sample_report.pdf",
                     mime="application/pdf",
-                    help="Click to download the sample Stroke report in PDF format."
-                )
-        except Exception as e:
-            st.error(f"Error preparing Stroke Report for download: {e}")
-            st.warning("Could not provide download button for this report.")
-    else:
-        st.error(f"Stroke Report PDF not found at: `{pdf_path}`. Please check file path and deployment.")
-
+                    help="Click to download the sample diabetes report in PDF format.")
+    
 
 # Diabetes Page
 elif st.session_state["page"] == "Diabetes":
