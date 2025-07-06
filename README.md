@@ -19,6 +19,7 @@ This project is a **Streamlit-based web application** that predicts the risk of 
 ```
 Health Predictions/
 ├── Project/
+|---|-- ML Notebooks
 │   ├── App/
 │   │   ├── app.py           # Main Streamlit app
 │   │   ├── genAI.py         # Gemini AI integration for health advice
